@@ -18,7 +18,7 @@ import datetime
 
 
 class CsTmParsePipeline:
-    SQL_TABLE_NAME = 'CSMONEY'
+    SQL_TABLE_NAME = 'CSMONEY_ITEMS'
 
     def __init__(self):
         # CREATING SSH TUNNEL
@@ -38,6 +38,7 @@ class CsTmParsePipeline:
                                  f" `quality` VARCHAR(6) NOT NULL," \
                                  f" `float` FLOAT(42) UNSIGNED NOT NULL," \
                                  f" `price` FLOAT(22) UNSIGNED NOT NULL," \
+                                 f" `link` VARCHAR(255) NOT NULL UNIQUE," \
                                  f" `overprice` FLOAT(22)," \
                                  f" `assetID` VARCHAR(64) NOT NULL UNIQUE," \
                                  f" `siteID` VARCHAR(64) NOT NULL," \
@@ -64,15 +65,15 @@ class CsTmParsePipeline:
         if "'" in item['fullName']:
             item['fullName'] = item['fullName'].replace("'", " ")
         
-        print(item)
+
 
         # INSERT into Table
         with self.connection.cursor() as cursor:
             insert_data_query = f"INSERT INTO `{self.SQL_TABLE_NAME}` " \
-                                f"(`fullName`,`quality`, `float`, `price`, `overprice`,`assetID`,`siteID`,`HighDemand`,`tradeLock`) " \
+                                f"(`fullName`,`quality`, `float`, `price`, `overprice`,`assetID`,`siteID`,`HighDemand`,`tradeLock`,`link`) " \
                                 f"VALUES ('{item['fullName']}', '{item['quality']}',{item['float']}, {item['price']}," \
-                                f" {item['overprice']}, '{item['assetID']}', '{item['siteID']}','{item['HighDemand']}','{item['tradeLock']}')" \
-                                f" ON DUPLICATE KEY UPDATE `HighDemand`='{item['HighDemand']}', `price`={item['price']}, `overprice`={item['overprice']}, `updated_at` = CURRENT_TIMESTAMP;"
+                                f" {item['overprice']}, '{item['assetID']}', '{item['siteID']}','{item['HighDemand']}','{item['tradeLock']}','{item['link']}')" \
+                                f" ON DUPLICATE KEY UPDATE `HighDemand`='{item['HighDemand']}', `price`={item['price']}, `overprice`={item['overprice']},`updated_at` = CURRENT_TIMESTAMP;"
             cursor.execute(insert_data_query)
             try:
                 self.connection.commit()

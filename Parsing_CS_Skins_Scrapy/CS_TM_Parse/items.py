@@ -16,5 +16,6 @@ class CsTmParseItem(scrapy.Item):
     siteID = scrapy.Field()
     HighDemand = scrapy.Field()
     tradeLock = scrapy.Field()
+    link = scrapy.Field()
 
 

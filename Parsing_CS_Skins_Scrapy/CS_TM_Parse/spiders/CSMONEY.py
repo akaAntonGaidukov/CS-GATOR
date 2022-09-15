@@ -6,7 +6,7 @@ import logging
 class CsmoneySpider(scrapy.Spider):
     # Receiving the names of skins
     skins_list = []
-    with open(r"C:\Users\user\Documents\JUPITER\CS_GATOR\Parsing_CS_Skins_Scrapy\CS_TM_Parse\all_skins.txt", "r") as f:
+    with open(r"/home/up/Downloads/git/CS-GATOR/Parsing_CS_Skins_Scrapy/CS_TM_Parse/all_skins.txt", "r") as f:
         for readline in f:
             skins_list.append(readline.strip('\n'))
 
@@ -40,7 +40,7 @@ class CsmoneySpider(scrapy.Spider):
                                         float=item['float'],
                                         price=item['price'], overprice=item['overprice'], assetID=item['assetId'],
                                         siteID=item['id'], HighDemand=item['hasHighDemand'],
-                                        tradeLock=trade_lock)
+                                        tradeLock=trade_lock,link=item['3d'])
                     continue  # If there is a trade lock just continue
 
                 except KeyError:  # means that this item has no trade lock
@@ -49,7 +49,7 @@ class CsmoneySpider(scrapy.Spider):
                 yield CsTmParseItem(fullName=item['fullName'], quality=item['quality'],
                                     float=item['float'],
                                     price=item['price'], overprice=item['overprice'], assetID=item['assetId'],
-                                    siteID=item['id'], HighDemand=item['hasHighDemand'],
+                                    siteID=item['id'], HighDemand=item['hasHighDemand'], link=item['3d'],
                                     tradeLock='None')
         except KeyError:  # means that this page DNE
             pass
